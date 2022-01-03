@@ -57,11 +57,15 @@ function App() {
 
   const Hit = ({ hit }: { hit: events }) => {
     return (
-      <div className="content" key={hit.id}>
-        <h1>Events: {hit.eventName}</h1>
-        <h1>Info: {hit.eventInfo}</h1>
-        <hr />
-      </div>
+      <section class="main">
+        <div class="card-container">
+          <div class="card-header">
+            <h4>{hit.eventName}</h4>
+            <p>{hit.eventInfo}</p>
+          </div>
+          <hr />
+        </div>
+      </section>
     );
   };
 
@@ -88,6 +92,7 @@ function App() {
           <div className="search">
             <SearchBox />
           </div>
+          <br />
           {/* <h1>Events: {event.eventName}</h1>
               <h1>Info: {event.eventInfo}</h1> */}
           {/* <button
