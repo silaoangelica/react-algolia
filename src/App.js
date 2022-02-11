@@ -7,50 +7,54 @@ import { render } from "react-dom";
 import { Autocomplete } from "./components/boiler-auto";
 import { getAlgoliaResults } from "@algolia/autocomplete-js";
 
-const searchClient = algoliasearch(
-  "3TS16BJ441",
-  "2a6d438a38a33ec9f799981710c6eb18"
-);
+const appId = "3TS16BJ441";
+const apiKey = "2a6d438a38a33ec9f799981710c6eb18";
+const searchClient = algoliasearch(appId, apiKey);
+
+export function EventItem({ hit, components }) {
+  return (
+    <a href={hit.url} className="aa-ItemLink">
+      <div className="aa-ItemContent">
+        <div className="aa-ItemTitle">
+          <components.Highlight hit={hit} attribute="eventName" />
+        </div>
+      </div>
+    </a>
+  );
+}
 
 function App() {
-  const Hit = ({ hit, components }: { hit: events }) => {
-    return (
-      <a href={hit.eventName} className="aa-ItemLink">
-        <div className="aa-ItemContent">
-          <div className="aa-ItemTitle">
-            <components.Highlight hit={hit} attribute="eventName" />
-          </div>
-        </div>
-      </a>
-    );
-  };
-
   return (
-    <Autocomplete
-      openOnFocus={true}
-      placeholder="Search for events"
-      getSources={({ query }) => [
-        {
-          sourceId: "events",
-          getItems() {
-            return getAlgoliaResults({
-              searchClient,
-              queries: [
-                {
-                  indexName: "events",
-                  query,
-                },
-              ],
-            });
-          },
-          templates: {
-            item({ item, components }) {
-              return <Hit hit={item.eventName} components={components} />;
+    <div className="app-container">
+      <h1>React Application</h1>
+      <Autocomplete
+        openOnFocus={true}
+        getSources={({ query }) => [
+          {
+            sourceId: "products",
+            getItems() {
+              return getAlgoliaResults({
+                searchClient,
+                queries: [
+                  {
+                    indexName: "events",
+                    query,
+                    params: {
+                      hitsPerPage: 5,
+                    },
+                  },
+                ],
+              });
+            },
+            templates: {
+              item({ item, components }) {
+                return <EventItem hit={item} components={components} />;
+              },
             },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+    </div>
   );
 }
 
