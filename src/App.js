@@ -12,39 +12,40 @@ const searchClient = algoliasearch(
   "2a6d438a38a33ec9f799981710c6eb18"
 );
 
-export function EventItem({ hit, components }: { hit: events }) {
-  return (
-    <a href={hit.eventName} className="aa-ItemLink">
-      <div className="aa-ItemContent">
-        <div className="aa-ItemTitle">
-          <components.Highlight hit={hit} attribute="eventName" />
-        </div>
-      </div>
-    </a>
-  );
-}
-
 function App() {
+  const Hit = ({ hit, components }: { hit: events }) => {
+    return (
+      <a href={hit.eventName} className="aa-ItemLink">
+        <div className="aa-ItemContent">
+          <div className="aa-ItemTitle">
+            <components.Highlight hit={hit} attribute="eventName" />
+          </div>
+        </div>
+      </a>
+    );
+  };
+
   return (
     <Autocomplete
       openOnFocus={true}
-      getSources={({ events_query_suggestions }) => [
+      placeholder="Search for events"
+      getSources={({ query }) => [
         {
-          sourceId: "zTRewfs6DgJNfQTBYXkd",
+          sourceId: "events",
           getItems() {
             return getAlgoliaResults({
               searchClient,
               queries: [
                 {
                   indexName: "events",
-                  events_query_suggestions,
+                  query,
                 },
               ],
             });
           },
           templates: {
             item({ item, components }) {
-              return <EventItem hit={item.eventName} components={components} />;
+              return <Hit hit={item.eventName} components={components} />;
             },
           },
         },
