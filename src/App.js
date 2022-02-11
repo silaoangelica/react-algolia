@@ -7,9 +7,10 @@ import { render } from "react-dom";
 import { Autocomplete } from "./components/boiler-auto";
 import { getAlgoliaResults } from "@algolia/autocomplete-js";
 
-const appId = "3TS16BJ441";
-const apiKey = "2a6d438a38a33ec9f799981710c6eb18";
-const searchClient = algoliasearch(appId, apiKey);
+const searchClient = algoliasearch(
+  "3TS16BJ441",
+  "2a6d438a38a33ec9f799981710c6eb18"
+);
 
 export function EventItem({ hit, components }) {
   return (
@@ -31,7 +32,7 @@ function App() {
         openOnFocus={true}
         getSources={({ query }) => [
           {
-            sourceId: "products",
+            sourceId: "events",
             getItems() {
               return getAlgoliaResults({
                 searchClient,
